@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     
-    const allTags = await Tag.findByPk(req.params.id. {
+    const allTags = await Tag.findByPk(req.params.id, {
       // be sure to include its associated Product data
       include: [{ model: Product, through: ProductTag }]
     });
@@ -33,8 +33,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
-  // create a new tag
+// create a new tag
+router.post('/', async (req, res) => { 
   try {
     const allTags = await Tag.create(req.body);
     res.status(200).json(allTags);
@@ -43,9 +43,10 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', (req, res) => {
+
   // update a tag's name by its `id` value
     //Calls the update method on the Book model
+  router.put('/:id', (req, res) => {
     Tag.update(
       {
         tag_name: req.body.tag_name
@@ -73,6 +74,19 @@ router.delete('/:id', async (req, res) => {
       where: {
         id: req.params.id
       }
+    });
+
+    if (!allTags) {
+      res.status(404).json({ message: 'bad request!' });
+      return;
+    }
+
+    res.status(200).json(allTags);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
+
+
 
 module.exports = router;
