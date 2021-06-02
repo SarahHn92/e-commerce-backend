@@ -19,30 +19,41 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     
-    const tag = await Tag.findByPk(req.params.id. {
+    const allTags = await Tag.findByPk(req.params.id. {
       // be sure to include its associated Product data
       include: [{ model: Product, through: ProductTag }]
     });
-    if (!tag) {
+    if (!allTags) {
       res.status(404).json({ message: 'Bad request.'});
       return;
     }
-    res.status(200).json(tag);
+    res.status(200).json(allTags);
   } catch (error) {
     res.status(500).json(err);
   }
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   // create a new tag
+  try {
+    const allTags = await Tag.create(req.body);
+    res.status(200).json(allTags);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 });
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   // delete on tag by its `id` value
+  try {
+    const allTags = await Tag.destroy({
+      where: {
+        id: req.params.id
+      }
 });
 
 module.exports = router;
