@@ -10,7 +10,7 @@ try {
     const allProducts = await Product.findAll({
       include: [{ model: Category, model: Tag, through: ProductTag }]
     });
-    res.status(200).json(allTags);
+    res.status(200).json(allProducts);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
       res.status(404).json({ message: 'Bad request.'});
       return;
     }
-    res.status(200).json(allTags);
+    res.status(200).json(allProducts);
   } catch (error) {
     res.status(500).json(err);
   }
